@@ -12,8 +12,17 @@ namespace SportsBettingAssistantProject
         public static void GetNewData()
         {
             /// Generates a new json file at \NFLdata.json
+            /// 
+            //Gets API KEY from gitignore
+            var reader = new StreamReader("apikeys.json");
+            var keyString = reader.ReadToEnd().ToString();
+            var keyJson = JObject.Parse(keyString);
+            var TheOddsAPIKey = keyJson["the_odds_api"];
+            reader.Close();
+
+
             //Variables 
-            var API_KEY = ;
+            var API_KEY = TheOddsAPIKey;
             var SPORT_KEY = "americanfootball_nfl";
             var REGION = "us";
             var MARKETS = "spreads";
