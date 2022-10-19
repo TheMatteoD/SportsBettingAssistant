@@ -1,8 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Runtime.ExceptionServices;
 using System.Text;
 
 namespace SportsBettingAssistantProject
@@ -49,11 +52,48 @@ namespace SportsBettingAssistantProject
             //Loop for each game
             foreach (var game in dataJson)
             {
-                //store all bookmakers odds
-                Console.WriteLine($"{game["home_team"]}");
-                //find outliers
+                // get game details
+                var homeTeam = game["home_team"];
+                var awayTeam = game["away_team"];
 
-                //return selected picks
+                var bookmakers = new List<string>();
+                string spreadTeam = "";
+                var spreads = new List<float>();
+
+                //store all bookmakers names and spreads
+                foreach (var bookmaker in game["bookmakers"])
+                {
+                    bookmakers.Add((string)bookmaker["key"]);
+                    spreadTeam = ((string)bookmaker["markets"][0]["outcomes"][0]["name"]);
+                    spreads.Add((float)bookmaker["markets"][0]["outcomes"][0]["point"]);
+                }
+                
+                
+                //find most common spread from all books
+                float? targetSpread =
+                spreads
+                .GroupBy(x => x)
+                .OrderByDescending(x => x.Count()).ThenBy(x => x.Key)
+                .Select(x => (float?)x.Key)
+                .FirstOrDefault();
+
+                if (targetSpread >= 0)
+                {
+                    Console.WriteLine($"The anticipated spread is: {spreadTeam} at +{targetSpread}");
+                }
+                else
+                {
+                    Console.WriteLine($"The anticipated spread is: {spreadTeam} at {targetSpread}");
+                }
+
+                //return hedged betting options
+
+                //foreach ()
+                
+                //what output will look like.
+                // vvvvvvvvvvvvvvvvvv
+                //Console.WriteLine($"At *insert bookmakers website* you can bet the *team name* at *spread* hedging your bet by *difference of anticipated spread and this bookmakers spread* points");
+
             }
 
         }
