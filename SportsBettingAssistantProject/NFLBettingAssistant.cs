@@ -60,6 +60,11 @@ namespace SportsBettingAssistantProject
                 string spreadTeam = "";
                 var spreads = new List<float>();
 
+
+                Console.WriteLine("---------------------------------------------------------");
+                Console.WriteLine($"{homeTeam} vs. {awayTeam}");
+
+
                 //store all bookmakers names and spreads
                 foreach (var bookmaker in game["bookmakers"])
                 {
