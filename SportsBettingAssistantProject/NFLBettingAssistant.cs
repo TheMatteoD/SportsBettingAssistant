@@ -84,23 +84,57 @@ namespace SportsBettingAssistantProject
 
                 if (targetSpread >= 0)
                 {
-                    Console.WriteLine($"The anticipated spread is: {spreadTeam} at +{targetSpread}");
+                    Console.WriteLine($"The anticipated outcome is: {spreadTeam} losing by {targetSpread}");
                 }
                 else
                 {
-                    Console.WriteLine($"The anticipated spread is: {spreadTeam} at {targetSpread}");
+                    Console.WriteLine($"The anticipated outcome is: {spreadTeam} winning by {targetSpread * -1}");
                 }
+                Console.WriteLine("-----");
 
                 //return hedged betting options
 
-                //foreach ()
-                
-                //what output will look like.
-                // vvvvvvvvvvvvvvvvvv
-                //Console.WriteLine($"At *insert bookmakers website* you can bet the *team name* at *spread* hedging your bet by *difference of anticipated spread and this bookmakers spread* points");
+                foreach (var bookmaker in game["bookmakers"])
+                {
+                    if ((float?)bookmaker["markets"][0]["outcomes"][0]["point"] > targetSpread)
+                    {
+                        float? spreadDifference = (float?)bookmaker["markets"][0]["outcomes"][0]["point"] - targetSpread;
+                        string teamName = (string)bookmaker["markets"][0]["outcomes"][0]["name"];
+                        float? spread = (float?)bookmaker["markets"][0]["outcomes"][0]["point"];
 
+                        if (spread >= 0)
+                        {
+                            Console.WriteLine($"At {bookmaker["title"]} you can bet the {teamName} at +{spread}.");
+                            Console.WriteLine($"Hedging your bet by {spreadDifference} points.");
+                        }
+                        else if (spread < 0)
+                        {
+                            Console.WriteLine($"At {bookmaker["title"]} you can bet the {teamName} at {spread}.");
+                            Console.WriteLine($"Hedging your bet by {spreadDifference} points.");
+                        }
+                        Console.WriteLine("---");
+
+                    }
+                    else if ((float?)bookmaker["markets"][0]["outcomes"][0]["point"] < targetSpread)
+                    {
+                        float? spreadDifference = targetSpread - (float?)bookmaker["markets"][0]["outcomes"][0]["point"];
+                        string teamName = (string)bookmaker["markets"][0]["outcomes"][1]["name"];
+                        float? spread = (float?)bookmaker["markets"][0]["outcomes"][1]["point"];
+
+                        if (spread >= 0)
+                        {
+                            Console.WriteLine($"At {bookmaker["title"]} you can bet the {teamName} at +{spread}.");
+                            Console.WriteLine($"Hedging your bet by {spreadDifference} points.");
+                        }
+                        else if (spread < 0)
+                        {
+                            Console.WriteLine($"At {bookmaker["title"]} you can bet the {teamName} at {spread}.");
+                            Console.WriteLine($"Hedging your bet by {spreadDifference} points.");
+                        }
+                        Console.WriteLine("---");
+                    }
+                }
             }
-
         }
     }
 }
