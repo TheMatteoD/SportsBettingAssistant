@@ -10,7 +10,7 @@ using System.Text;
 
 namespace SportsBettingAssistantProject
 {
-    internal class NFLBettingAssistant
+    internal class NFLBettingAssistant : IBettingAssistant
     {
         public static void GetNewData()
         {
